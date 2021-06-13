@@ -11,7 +11,7 @@ define('LOCALHOST', 'localhost');
 define('DB_USERNAME', 'root');
 define('DB_PASSWORD', '');
 define('DB_NAME', 'food-order');
-define('SITEURL', 'http://localhost/FoodFactory/');
+define('SITEURL', 'http://localhost/Food-Factory/');
 
 	
 $con =  mysqli_connect(LOCALHOST, DB_USERNAME, DB_PASSWORD); //connection
