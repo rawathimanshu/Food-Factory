@@ -1,146 +1,117 @@
+	<?php
+
+include ('../config/constant.php');
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Login</title>
+	<title>Login - Food Order </title>
 	<link rel="stylesheet" type="text/css" href="../css/admin.css">
-</head>
-<body>
-	<!-- <div class = "login">
-		<p>Created By= <a href="www.Himanshu.com"></a></p>
-	</d -->
+
+</head>	
+<body style="background-image: url('../4.png');">
+	<div class="header">
+
+<h1 class="text-center" style="background-image: url('../4.png');font-size: 70px;margin-left:px; padding-top: 30px; height: 90px; letter-spacing: 8px;">Login</h1>
+
+
+		
+	</div>
+	<div class ="login text-center">
+		
+
+			<fieldset style="height:390px;width: 400px; margin-left: -95px; border: 2px solid black;padding: 15%;border-radius: 8px;background-image: url('../21.jpg');">
+		
+
+		<?php 
+
+		if(isset($_SESSION['login']))
+		{
+			echo $_SESSION['login'];
+			unset($_SESSION['login']);
+
+		}
+		if(isset($_SESSION['no-login-message']))
+		{
+	echo ($_SESSION['no-login-message']);
+	unset($_SESSION['no-login-message']);
+
+		}
+
+
+		 ?>
+		 
+
+		<form action="" method="POST">
+		
+ 
+			<b style="font-size: 30px;">Username:</b><br><br>
+
+			<input style=" width: 80%;margin: 0 auto; padding: 3%;border-radius: 12px" type="text" name="username" placeholder="Enter Your Name"><br><br>
+
+			<b style="font-size: 30px;">Password:</b><br><br>
+			<input style=" width: 80%; margin: 0 auto; padding: 3%;border-radius: 12px" type="text" name="password" placeholder="Enter Your Password"><br><br><br>
+
+
+			<input style="font-size: 20px; width: 80px;border-radius: 8px;height: 34px;" type="submit" name="submit" value="Login" class="btn-primary text-center">
+
+		</form>
+		<p class="text-center" style="margin-top: 23px; "><b style="font-size: 25px;">Created By : </b><br> <br><a style="text-decoration: none;font-size: 23px;color: white;" href="www.Himanshu.com"><b>Himanshu Rawat & Chetan Nandwal</b> </p>	
+
+	</fieldset>
+	</div>
+
 
 </body>
 </html>
 
-<?php 
-include('Partial-front/menu.php');
+<?php
 
-  ?>
+//check whether the submit is clicked or not
 
-  <section class="food-search">
-        <div class="container">
+if(isset($_POST['submit']))
+{
+	//process for login
+	//Get the data from the login form
 
-  <h1 class="text-center" style="font-size: 64px;margin-top: -60px;margin-bottom: 60px; color: Maroon;font-family: aerial;letter-spacing: 4px;">Login</h1>
+	echo $username = $_POST['username'];
+	echo $password = md5($_POST['password']);
 
-  <form action="" method="POST" class="text-center order" style="">	
+	//2. SQL to check the  user with username and passowrd is exit or not 
 
+	$sql  ="SELECT * FROM tbl_admin WHERE username='$username' AND password='$password'
+	";
 
-  <fieldset style="height:400px; border: 5px solid black;padding: 10%;border-radius: 8px;">
-                   
-                    <div class="order-label" style="font-size: 34px; color: black;letter-spacing: 4px;font-family: bold;">Username</div><br>
-                    <input style="padding: 2%;width: 350px;" type="email" name="username" placeholder="E.g. Himanshu@gmail.com" class="input-responsive" required>
-<br><br>
-                     <div class="order-label" style="font-size: 34px; color: black;letter-spacing: 4px;font-family: bold;">Password</div><br>
-                    <input style="padding: 2%;width: 350px;" type="password" name="password" placeholder="Password" class="input-responsive" required>
+	//3.Execute the query 
+	$res= mysqli_query($con,$sql);
 
-<br><br><br>
-                    <input style="width: 90px; height: 40px;" type="submit" name="submit" value="Submit" class="btn btn-primary">
+	//4.Count rows to check whether the user exits or not
 
-<br><br><br><br>
-                <b style="font-size: 20px;">  Create Account : </b>
-                   <a href="<?php echo SITEURL;?>sinup.php">  <input  type="button" name="signup" value="Sinup" class="btn btn-primary" style="width: 90px;height: 30px;margin-left: 5px;" > </a>
-                     
-       
-                    
+	$count = mysqli_num_rows($res);
 
-                </fieldset>
+	if($count == 1)
+	{
+		//user exits
+$_SESSION['login'] = "<div class='success'> <h2>Login Successfull</h2></div>";
 
-  	
+$_SESSION['user'] = $username; //To check ewhteeher the user is logout  in or not and logout will unset it
 
+header("location:".SITEURL.'admin/');
 
+	}
 
-  </form>
+	else
+	{
+		//user not avail
+		$_SESSION['login'] = "<div class='error text-center'><h2> Login Failed <h2></div>";
 
- <?php
-
-  
- //  //check whether the submit button is pressed or not
-
- if(isset($_POST['submit']))
-            {
-
-        $name1 = $_POST['name'];
-          
-
-        $name = $_POST['username'];
-
-        $login_date = date('Y-m-d h:i:sa');
-
-        $password = $_POST['password'];
-
-
-        //Query to check Detail
-
-   $sql2 = "SELECT * FROM tbl_sinup WHERE user_name='$name' AND password='$password'";
-
- 
-
-
-        //execute the Query 
-
-        $res2 = mysqli_query($con,$sql2);
-
-
-        $num = mysqli_num_rows($res2);
- 
-
-        //chech query executerd or not
-
-        if($num >= 1)
-        {
-            //query executed and data is saves
-
-        $_SESSION['name'] = $name;
-
-
-     $_SESSION['feedback1'] = "<div class='success text-center'><h1>Login Successfully <h1></div>";
-
-       $sql3 = "INSERT INTO tbl_login SET 
-       user_name = '$name',
-       password='$password',
-       login_date='$login_date'
-       "; 
-
-
-          mysqli_query($con,$sql3);
-
-
-            header('location:'.SITEURL);
-        }
-
-        else
-        {
-            //Failed to save Data
-              $_SESSION['feedback1'] = "<div class='error text-center'>Failed to Login. Try Again !</div>";
-              header('location:'.SITEURL);
-
-        }
-
-   
-
-        //  mysqli_close($con); 
-
-              
-
-              }
-
-
-
-        // $num1 = mysqli_num_rows($res);
+header("location:".SITEURL.'admin/login.php');
+	}
 
 
 
 
 
-
-
- ?>
-
-</div>
-</section>
-
-  <?php
-
-  include('Partial-front/footer.php');
-
-  ?>
+}
+?>
